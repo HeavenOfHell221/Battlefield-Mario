@@ -1,0 +1,63 @@
+Actions :
+
+    Au début du projet les animations des différents objets étaient fortement lié aux nombres d'image par seconde. Suivant le nombre de boucle de jeu par seconde, 
+la vitesse de l'animation variait. L'implémentation était tel qu'à chaque boucle de jeu chaque sprite passaient à son image suivante. Pour ralentir une animation, 
+il fallait donc au minimum la diviser par 2 (changer d'image toutes les 2 boucles de jeu au lieu d'une). Pour une animation cela n'est pas encore trop grave. 
+Cependant le même principe était utilisé pour le lancement des missiles. Soit on pouvait tirer un missile à chaque boucle, soit toute les 2 boucles, 3 boucles etc... 
+
+    Cette façon d'implémenter le lancement du missile prend implicitement un paramètre qu'on ne veux pas : Le temps d'une boucle de jeu.
+Même si via le code on décide de pouvoir lancer un missile toute les 2 boucles de jeu, on ne connait pas le temps d'une boucle. On ne connait donc pas le nombre de missile 
+que le joueur peut lancer dans un temps donné. Pour palier à cela, nous avons crée une stucture action_t qui utilise le temps pour restreindre une "action" plutôt que d'utiliser 
+les boucles de jeu. De cette manière, le jeu peut tourner à 30 FPS ou à 120 FPS, le temps entre deux missiles ne serra pas impacté.
+
+typedef struct action {
+    int cooldown; // Temps minimal pour réaliser à nouveau l'action (en ms)
+    Uint32 lastTimeActionWasPerformed; // Dernière fois que l'action a été réalisé (en ms)
+    int currentState; // Permet de modifier le comportement de l'action
+} action_t;
+
+    Nous utilisons cette stucture pour 3 actions : 
+    - Les animations : Cela permet d'avoir une réelle influence sur la vitesse de l'animation. Quand l'oiseau decend et que l'animation est sensé ralentir, nous pouvons 
+    simplement augmenté la variable "cooldown". Cela va réduire le nombre de fois où nous changeons l'image de l'oiseau dans un temps donné. De la même manière, quand on appuie sur
+    la touche pour remonter, nous mettons la variable "cooldown" à 0, ce qui revient à changer l'image de l'oiseau à chaque boucle de jeu.
+    - Lançer des missiles : /* TODO */
+    - Faire clignoter l'oiseau : /* TODO */
+
+    Nous avons implémenter une fonction permettant simplement de vérifier si l'action donné en paramètre est faisable ou non. Si la fonction renvoie true, on part du principe que l'action est
+    faisable et on l'effectue.
+
+int isPossibleAction(action_t* action) {
+    Uint32 currentTime = SDL_GetTicks(); // On précupère le temps présent
+    if((currentTime - action->lastTimeActionWasPerformed) >= action->cooldown)
+    {
+        // L'action est possible, on reset le cooldown de l'action
+        action->lastTimeActionWasPerformed = currentTime;
+        return true;
+    }
+    return false;
+}
+
+
+Timers :
+
+typedef struct timer {
+    timer_id_t id; // ID du timer récupéré via la fonction add_timer
+    timer_callback_func_t callback; // Fonction que le timer va appeler
+}myTimer_t;
+
+
+Sinusoidales :
+
+
+
+
+
+
+// Pour lancer un missile
+if(espace && isPossibleAction(&object->actions[shotMissile]))
+{
+    if(object->state != OBJECT_STATE_DEAD)
+    {
+        animation_missile_add(object);
+    }   
+}

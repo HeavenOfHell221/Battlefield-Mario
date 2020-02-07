@@ -48,7 +48,7 @@ typedef struct _dyn_obj {
     int type; // can be OBJECT_TYPE_BIRD, ...
     int state; // can be OBJECT_STATE_NORMAL, ...
     point_t positionScreen;
-    point_t positionOffset;
+    point_t positionMap;
     float xs, ys; // speed
     int direction; // LEFT or RIGHT
     int current_animation;

@@ -28,8 +28,8 @@ void object_object_init(dynamic_object_t *object, sprite_t *sp, int type, int st
     object->state = state;
     object->positionScreen.x = x;
     object->positionScreen.y = y;
-    object->positionOffset.x = x;
-    object->positionOffset.y = y;
+    object->positionMap.x = x;
+    object->positionMap.y = y;
     object->xs = xs;
     object->ys = ys;
     object->direction = direction;

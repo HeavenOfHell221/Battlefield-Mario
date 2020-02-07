@@ -60,17 +60,6 @@ void animation_one_step (int left, int right, int up, int down, int espace)
                     break;
             }
         }
-        else
-            continue;
-
-        switch(currentObject->type)
-        {
-            case OBJECT_TYPE_MISSILE:
-                //badbirdDetection(currentObject);
-                break;
-            default:
-                break;
-        }   
     }
 
 }
@@ -80,8 +69,8 @@ void animation_render_objects()
     for_all_objects_static(currentObject)
     {
         SDL_Rect dst;
-        dst.x = currentObject->positionScreen.x;
-        dst.y = currentObject->positionScreen.y;
+        dst.x = currentObject->positionMap.x - positionScreenWorld.x;
+        dst.y = currentObject->positionMap.y - positionScreenWorld.y;
         dst.w = currentObject->sprite->display_width;
         dst.h = currentObject->sprite->display_height;
 

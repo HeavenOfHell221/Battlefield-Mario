@@ -9,7 +9,7 @@ dynamic_object_t mario_object;
 
 void createMario()
 {
-    object_object_init(&mario_object, &mario_sprite, OBJECT_TYPE_MARIO, OBJECT_STATE_IN_AIR, 100, 100, 4, 0, LEFT, NORMAL_DIRECTION);
+    object_object_init(&mario_object, &mario_sprite, OBJECT_TYPE_MARIO, OBJECT_STATE_IN_AIR, WIN_WIDTH * 0.25, WIN_HEIGHT * 0.25, 4, 0, LEFT, NORMAL_DIRECTION);
     action_init_init(&mario_object, shotMissile, SHOT_MISSILE_DELAY);
 }
 
@@ -51,9 +51,10 @@ void animation_mario_moves(dynamic_object_t* object, int left, int right, int up
 int animation_mario_onestep(dynamic_object_t* object)
 {
     object->state = OBJECT_STATE_IN_AIR;
-    apply_gravity(object);
-    apply_detection_bloc_solid_X(object);
-    apply_detection_bloc_solid_Y(object);
+
+    apply_gravity(object); 
+    apply_detection(object);
+    apply_max_edge(object);
     apply_motion(object);
     apply_animation(object);
     printDebug(object);
@@ -61,18 +62,110 @@ int animation_mario_onestep(dynamic_object_t* object)
     return object->state;
 }
 
+void apply_max_edge(dynamic_object_t* object)
+{
+    apply_max_edge_X(object);
+    apply_max_edge_Y(object);
+}
+
+void apply_max_edge_Y(dynamic_object_t* object)
+{
+    if(object->positionScreen.y > WIN_HEIGHT * 0.6)
+    {
+        if(positionScreenWorld.y + WIN_HEIGHT < MAP_SIZE_Y * MAP_PIXEL)
+        {
+            object->positionScreen.y = WIN_HEIGHT * 0.6;
+            positionScreenWorld.y += object->ys;
+        }
+        else
+        {
+            while((positionScreenWorld.y % MAP_PIXEL) != 0)
+            {
+                positionScreenWorld.y--;
+                object->positionMap.y--;
+            }
+
+            while((object->positionMap.y - object->positionScreen.y) % MAP_PIXEL != 0)
+            {
+                object->positionMap.y++;
+            }
+        }
+    }
+    else if(object->positionScreen.y < WIN_HEIGHT * 0.4)
+    {
+        if(positionScreenWorld.y != 0)
+        {
+            object->positionScreen.y = WIN_HEIGHT * 0.4;
+            positionScreenWorld.y += object->ys;
+
+            if(positionScreenWorld.y < 0)
+            {
+                positionScreenWorld.y = 0;
+            }
+        }
+    }
+}
+
+void apply_max_edge_X(dynamic_object_t* object)
+{
+    if(object->positionScreen.x > WIN_WIDTH * 0.8)
+    {
+        if(positionScreenWorld.x + WIN_WIDTH < MAP_SIZE_X * MAP_PIXEL)
+        {
+            object->positionScreen.x = WIN_WIDTH * 0.8 - 1;
+            positionScreenWorld.x += object->xs;
+        }
+    }
+    else if(object->positionScreen.x < WIN_WIDTH * 0.2)
+    {
+        if(positionScreenWorld.x != 0)
+        {
+            object->positionScreen.x = WIN_WIDTH * 0.2 + 1;
+            positionScreenWorld.x += object->xs;
+            if(positionScreenWorld.x < 0)
+            {
+                positionScreenWorld.x = 0;
+            }
+        }
+    }
+}
+
+void apply_detection(dynamic_object_t* object)
+{
+    apply_detection_bloc_solid_X(object);
+    apply_detection_bloc_solid_Y(object);
+}
+
 void apply_gravity(dynamic_object_t* object)
 {
     if (object->ys < MAX_GRAVITY && object->state == OBJECT_STATE_IN_AIR)
+    {
         object->ys += GRAVITY;
+    }
 }
 
 void apply_motion(dynamic_object_t* object)
 {
     object->positionScreen.y += object->ys;
-    object->positionOffset.y += object->ys;
+    object->positionMap.y += object->ys;
     object->positionScreen.x += object->xs;
-    object->positionOffset.x += object->xs;
+    object->positionMap.x += object->xs;
+
+    if(positionScreenWorld.x == 0)
+    {
+        object->positionMap.x = object->positionScreen.x;
+        
+    }
+
+    if(positionScreenWorld.y == 0)
+    {
+        object->positionMap.y = object->positionScreen.y;
+    }
+
+    if(object->positionMap.y < 0)
+    {
+        object->positionMap.y = 0;
+    }
 }
 
 
@@ -88,9 +181,12 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
 {
     if(object->xs > 0) // Vers la droite
     {
-        int bloc1 = map_get((object->positionOffset.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionOffset.y + 1) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionOffset.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionOffset.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
-        int bloc3 = map_get((object->positionOffset.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionOffset.y + object->sprite->display_height) / MAP_PIXEL);
+        int bloc1 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL,
+         (object->positionMap.y + 1) / MAP_PIXEL);
+        int bloc2 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL,
+         (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        int bloc3 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL,
+         (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
         if(get_type(bloc1) == MAP_OBJECT_SOLID 
         || get_type(bloc2) == MAP_OBJECT_SOLID
         || get_type(bloc3) == MAP_OBJECT_SOLID)
@@ -100,9 +196,12 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
     }
     else if(object->xs < 0) // Vers la gauche
     {
-        int bloc1 = map_get((object->positionOffset.x + object->xs) / MAP_PIXEL, (object->positionOffset.y + 1) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionOffset.x + object->xs) / MAP_PIXEL, (object->positionOffset.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
-        int bloc3 = map_get((object->positionOffset.x + object->xs) / MAP_PIXEL, (object->positionOffset.y + object->sprite->display_height) / MAP_PIXEL);
+        int bloc1 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL,
+         (object->positionMap.y + 1) / MAP_PIXEL);
+        int bloc2 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL,
+         (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        int bloc3 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL,
+         (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
         if(get_type(bloc1) == MAP_OBJECT_SOLID 
         || get_type(bloc2) == MAP_OBJECT_SOLID
         || get_type(bloc3) == MAP_OBJECT_SOLID)
@@ -112,27 +211,57 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
     }
 }
 
+void apply_detection_bloc_solid_Y_aux(dynamic_object_t* object, int bloc1, int bloc2)
+{
+    while((get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID
+    || get_type(bloc1) == MAP_OBJECT_SEMI_SOLID || get_type(bloc2) == MAP_OBJECT_SEMI_SOLID)
+    && object->ys > 0)
+    {
+        object->ys--;
+        bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
+        (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
+        (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+    }
+    object->state = OBJECT_STATE_GROUND;
+}
+
 void apply_detection_bloc_solid_Y(dynamic_object_t* object)
 {
     if(object->ys > 0) // Vers le bas
     {
-        int bloc1 = map_get((object->positionOffset.x + 5) / MAP_PIXEL, (object->positionOffset.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionOffset.x + object->sprite->display_width - 5) / MAP_PIXEL, (object->positionOffset.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID
-        || get_type(bloc1) == MAP_OBJECT_SEMI_SOLID || get_type(bloc2) == MAP_OBJECT_SEMI_SOLID)
+        int bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
+         (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        int bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
+         (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+
+        if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID)
         {
-            object->ys = 0;
-            object->state = OBJECT_STATE_GROUND;
+            apply_detection_bloc_solid_Y_aux(object, bloc1, bloc2);
+        }
+        else if(get_type(bloc1) == MAP_OBJECT_SEMI_SOLID || get_type(bloc2) == MAP_OBJECT_SEMI_SOLID)
+        {
+            int bloc3 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
+             (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
+            int bloc4 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
+             (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
+
+            if(get_type(bloc3) != MAP_OBJECT_SEMI_SOLID && get_type(bloc4) != MAP_OBJECT_SEMI_SOLID)
+            {
+                apply_detection_bloc_solid_Y_aux(object, bloc1, bloc2);
+            }
         }
     }
     else if(object->ys < 0) // Vers le haut
     {
-        int bloc1 = map_get((object->positionOffset.x + 5) / MAP_PIXEL, (object->positionOffset.y + object->ys/2) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionOffset.x + object->sprite->display_width - 5) / MAP_PIXEL, (object->positionOffset.y + object->ys/2) / MAP_PIXEL);
+        int bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
+         (object->positionMap.y + object->ys/2) / MAP_PIXEL);
+        int bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
+         (object->positionMap.y + object->ys/2) / MAP_PIXEL);
+
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID)
         {
             object->ys = 0;
-            object->state = OBJECT_STATE_GROUND;
         }
     }
 }
@@ -149,125 +278,9 @@ void printDebug(dynamic_object_t* object)
     }  
 
     printf("positionScreen => %d, %d\n", object->positionScreen.x, object->positionScreen.y);
-    printf("positionOffset => %d, %d\n", object->positionOffset.x, object->positionOffset.y);
+    printf("positionMap => %d, %d\n", object->positionMap.x, object->positionMap.y);
+    printf("positionWorld => %d, %d\n", positionScreenWorld.x, positionScreenWorld.y);
+    printf("Delta (y) => %d\n\n", (object->positionMap.y - object->positionScreen.y));
     printf("Speed => %f, %f\n", object->xs, object->ys);
-    printf("Bloc => %d\n\n", get_type(map_get((object->positionOffset.x + 5) / MAP_PIXEL, (object->positionOffset.y + object->sprite->display_height - 1) / MAP_PIXEL)));
+    printf("Bloc => %d\n\n", get_type(map_get((object->positionMap.x + 5) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height - 1) / MAP_PIXEL)));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*void apply_block_detection_y(dynamic_object_t* object, int bloc_type)
-{
-    int map_type = map_get((object->positionOffset.x + MAP_PIXEL / 2) / MAP_PIXEL, (object->positionOffset.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-    if(map_type == bloc_type)
-    {
-        int map_type_test = map_get((object->positionOffset.x + MAP_PIXEL / 2) / MAP_PIXEL, (object->positionOffset.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        while(map_type_test == bloc_type)
-        {
-            object->ys--;
-            map_type_test = map_get((object->positionOffset.x + MAP_PIXEL / 2) / MAP_PIXEL, (object->positionOffset.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        }
-        object->state = OBJECT_STATE_GROUND;
-    }
-}*/
-
-/*void apply_block_detection_x(dynamic_object_t* object, int bloc_type)
-{
-    if(object->direction == LEFT)
-    {
-        int map_type = map_get((object->positionScreen.x + object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-        if(map_type == bloc_type)
-        {
-            int map_type_test = map_get((object->positionScreen.x+ object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-            while(map_type_test == bloc_type)
-            {  
-                object->xs++;
-                map_type_test = map_get((object->positionScreen.x+ object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-            }
-        }
-    }
-    else if(object->direction == RIGHT)
-    {
-        int map_type = map_get((object->positionScreen.x + object->sprite->display_width + object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-        if(map_type == bloc_type)
-        {
-            int map_type_test = map_get((object->positionScreen.x + object->sprite->display_width + object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-            while(map_type_test == bloc_type)
-            {  
-                object->xs--;
-                map_type_test = map_get((object->positionScreen.x + object->sprite->display_width + object->xs) / MAP_PIXEL, object->positionScreen.y / MAP_PIXEL);
-            }
-        }
-    }
-}*/

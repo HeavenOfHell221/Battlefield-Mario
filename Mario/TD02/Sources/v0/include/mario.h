@@ -16,11 +16,14 @@ void apply_gravity(dynamic_object_t* object);
 void apply_motion(dynamic_object_t* object);
 void apply_animation(dynamic_object_t* object);
 void apply_max_edge(dynamic_object_t* object);
+void apply_max_edge_X(dynamic_object_t* object);
+void apply_max_edge_Y(dynamic_object_t* object);
 void apply_block_detection_y(dynamic_object_t* object, int bloc_type);
 void apply_block_detection_x(dynamic_object_t* object, int bloc_type);
 void apply_detection(dynamic_object_t* object);
 void apply_detection_bloc_solid_Y(dynamic_object_t* object);
 void apply_detection_bloc_solid_X(dynamic_object_t* object);
 void printDebug(dynamic_object_t* object);
+void apply_detection_bloc_solid_Y_aux(dynamic_object_t* object, int bloc1, int bloc2);
 
 #endif

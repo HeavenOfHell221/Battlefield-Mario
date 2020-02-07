@@ -26,7 +26,7 @@ typedef struct _static_obj {
     sprite_t *sprite;
     int objectType;
     int ID;
-    point_t positionScreen;
+    point_t positionMap;
     int direction; // LEFT or RIGHT
     list_head_t global_chain;
 } static_object_t;
@@ -41,5 +41,7 @@ int get_type(int object);
 extern int** map;
 extern int countID;
 extern map_object_type_t objects[];
+
+extern point_t positionScreenWorld;
 
 #endif

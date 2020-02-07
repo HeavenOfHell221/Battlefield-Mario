@@ -30,7 +30,7 @@ int animation_missile_onestep (dynamic_object_t *object)
     }
     
     object->positionScreen.x += object->xs;
-    object->positionOffset.x += object->xs;
+    object->positionMap.x += object->xs;
 
     if(object->positionScreen.x > WIN_WIDTH * 1.1 || object->positionScreen.x < WIN_HEIGHT * -0.1)
         return OBJECT_STATE_DESTROYED;

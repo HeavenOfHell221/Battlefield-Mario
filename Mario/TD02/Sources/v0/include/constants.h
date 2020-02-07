@@ -11,7 +11,7 @@
 // FOR MARIO PLAYER
 #define MAX_GRAVITY 15 //Force max que la gravité exerce
 #define GRAVITY 1 //Gravité ajouté par image
-#define JUMP_FORCE -23
+#define JUMP_FORCE -19
 #define SHOT_MISSILE_DELAY 500
 
 #define MAX_ACTION 2
@@ -21,8 +21,8 @@
 #define NORMAL_DIRECTION 1
 #define REVERSED_DIRECTION -1
 
-#define MAP_SIZE_X 20
-#define MAP_SIZE_Y 15
+#define MAP_SIZE_X 38
+#define MAP_SIZE_Y 17
 
 #define MAP_PIXEL 64
 

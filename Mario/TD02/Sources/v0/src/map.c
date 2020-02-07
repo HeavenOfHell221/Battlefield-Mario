@@ -4,6 +4,7 @@
 int** map;
 int countID = 0;
 map_object_type_t objects[5];
+point_t positionScreenWorld;
 
 void map_new(unsigned width, unsigned height)
 {
@@ -29,23 +30,38 @@ void map_new(unsigned width, unsigned height)
         map_set(4, width - 1, y);
     }
 
-    map_set(4, 3, 12);
-    map_set(4, 4, 13);
-    map_set(4, 5, 12);
-    map_set(1, 6, 11);
-    map_set(4, 7, 11);
-    map_set(4, 8, 10);
-    map_set(1, 9, 9);
-    map_set(1, 10, 9);
+    map_set(4, 3, 14);
+    map_set(4, 4, 15);
+    map_set(4, 5, 14);
+    map_set(1, 6, 13);
+    map_set(4, 7, 13);
+    map_set(4, 8, 12);
+    map_set(1, 9, 11);
+    map_set(1, 10, 11);
 
-    for(int y = 0; y < height; y++)
-    {
-        for(int x = 0; x < width; x++)
-        {
-            printf("%d ", map_get(x, y));
-        }
-        printf("\n");
-    }
+    map_set(4, 25, 14);
+    map_set(4, 26, 15);
+    map_set(4, 26, 14);
+    map_set(1, 27, 13);
+    map_set(4, 28, 13);
+    map_set(4, 29, 12);
+
+    map_set(4, 13, 13);
+    map_set(4, 14, 12);
+    map_set(4, 15, 11);
+    map_set(4, 16, 10);
+    map_set(4, 17, 9);
+    map_set(4, 18, 8);
+    map_set(4, 19, 7);
+    map_set(4, 20, 6);
+    map_set(4, 21, 5);
+    map_set(4, 22, 4);
+    map_set(4, 23, 4);
+    map_set(4, 24, 3);
+    map_set(4, 25, 3);
+
+    positionScreenWorld.x = 0;
+    positionScreenWorld.y = 0;
 }
 
 void map_allocate(unsigned width, unsigned height)
@@ -67,8 +83,8 @@ void map_set(int map_object, int x, int y)
     obj->sprite = &objects[map_object].sprite;
     obj->objectType = objects[map_object].objectType; 
     obj->ID = objects[map_object].ID;
-    obj->positionScreen.x = x * MAP_PIXEL;
-    obj->positionScreen.y = y * MAP_PIXEL;
+    obj->positionMap.x = x * MAP_PIXEL;
+    obj->positionMap.y = y * MAP_PIXEL;
     obj->direction = LEFT;
     obj->global_chain.next = NULL;
     obj->global_chain.prev = NULL;

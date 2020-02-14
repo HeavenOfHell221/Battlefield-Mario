@@ -21,7 +21,7 @@ void object_init ()
     object_class[OBJECT_TYPE_TEXT].timer_func = NULL;
 }
  
-void object_object_init(dynamic_object_t *object, sprite_t *sp, int type, int state, int x, int y, float xs, float ys, int direction, int animation_status)
+void object_object_init (dynamic_object_t *object, sprite_t *sp, int type, int state, int x, int y, int speed, int direction, int animation_status)
 {
     object->sprite = sp;
     object->type = type;
@@ -30,8 +30,8 @@ void object_object_init(dynamic_object_t *object, sprite_t *sp, int type, int st
     object->positionScreen.y = y;
     object->positionMap.x = x;
     object->positionMap.y = y;
-    object->xs = xs;
-    object->ys = ys;
+    object->xs = 0;
+    object->ys = 0;
     object->direction = direction;
     object->current_animation = 0;
     object->animation_status = animation_status;
@@ -41,4 +41,5 @@ void object_object_init(dynamic_object_t *object, sprite_t *sp, int type, int st
     actionTab_init(object->actions);
     timer_init(&object->timer);
     object->canMoveTrees = 0;
+    object->speed = speed;
 }

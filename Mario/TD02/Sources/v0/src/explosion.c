@@ -11,7 +11,7 @@ void createExplosion(dynamic_object_t *object)
 {
     dynamic_object_t* explosion = (dynamic_object_t*) calloc(1, sizeof(dynamic_object_t));
 
-    object_object_init(explosion, &explosion_sprite, OBJECT_TYPE_EXPLOSION, OBJECT_STATE_IN_AIR, 0, 0, 0, 0, RIGHT, NORMAL_DIRECTION);
+    object_object_init(explosion, &explosion_sprite, OBJECT_TYPE_EXPLOSION, OBJECT_STATE_IN_AIR, 0, 0, 8, RIGHT, NORMAL_DIRECTION);
 
     animation_explosion_add(explosion, 
     object->positionScreen.x - ((explosion->sprite->display_width*explosion->sprite->size_factor) / 2) + object->sprite->display_width, 

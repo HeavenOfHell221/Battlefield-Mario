@@ -9,7 +9,7 @@ void animation_missile_add (dynamic_object_t *object, int direction)
 {
     dynamic_object_t* missile = (dynamic_object_t*) calloc(1, sizeof(dynamic_object_t));
 
-    object_object_init(missile, &missile_sprite, OBJECT_TYPE_MISSILE, OBJECT_STATE_IN_AIR, 0, 0, 0, 0, direction, NORMAL_DIRECTION);
+    object_object_init(missile, &missile_sprite, OBJECT_TYPE_MISSILE, OBJECT_STATE_IN_AIR, 0, 0, 8, direction, NORMAL_DIRECTION);
     missile->positionScreen.x = object->positionScreen.x;
     missile->positionScreen.y = object->positionScreen.y;
 
@@ -22,11 +22,11 @@ int animation_missile_onestep (dynamic_object_t *object)
 {
     if(object->direction == RIGHT)
     {
-        object->xs = MISSILE_SPEED - mario_object.xs;
+        object->xs = object->speed;
     }
     else
     {
-        object->xs = -MISSILE_SPEED - mario_object.xs;
+        object->xs = -object->speed;
     }
     
     object->positionScreen.x += object->xs;

@@ -3,65 +3,31 @@
 
 int** map;
 int countID = 0;
-map_object_type_t objects[5];
+map_object_type_t map_objects[10];
 point_t positionScreenWorld;
 
 void map_new(unsigned width, unsigned height)
 {
     map_allocate(width, height);
 
-    objects[countID].objectType = MAP_OBJECT_AIR;
+    map_objects[0].objectType = MAP_OBJECT_AIR;
+    map_objects[0].ID = 0;
+
     // Air, ID = 0
-    map_object_add("../images/floor.png", 1, MAP_OBJECT_SEMI_SOLID); // ID = 1
-    map_object_add("../images/herb.png", 1, MAP_OBJECT_AIR); // ID = 2
-    map_object_add("../images/ground.png", 1, MAP_OBJECT_SOLID); // ID = 3
-    map_object_add("../images/wall.png", 1, MAP_OBJECT_SOLID); // ID = 4
+    map_object_add("../images/floor.png", 1, 1, 1, 1, MAP_OBJECT_SEMI_SOLID, 0); // ID = 1
+    map_object_add("../images/herb.png", 1, 1, 1, 1, MAP_OBJECT_AIR, 0); // ID = 2
+    map_object_add("../images/ground.png", 1, 1, 1, 1, MAP_OBJECT_SOLID, 0); // ID = 3
+    map_object_add("../images/wall.png", 1,  1, 1, 1, MAP_OBJECT_SOLID, 0); // ID = 4
 
-    // Sol
-    for(int x = 0; x < width; x++)
-    {
-        map_set(3, x, height - 1);
-    }
-
-    // Murs
-    for(int y = 0; y < height; y++)
-    {
-        map_set(4, 0, y);
-        map_set(4, width - 1, y);
-    }
-
-    map_set(4, 3, 14);
-    map_set(4, 4, 15);
-    map_set(4, 5, 14);
-    map_set(1, 6, 13);
-    map_set(4, 7, 13);
-    map_set(4, 8, 12);
-    map_set(1, 9, 11);
-    map_set(1, 10, 11);
-
-    map_set(4, 25, 14);
-    map_set(4, 26, 15);
-    map_set(4, 26, 14);
-    map_set(1, 27, 13);
-    map_set(4, 28, 13);
-    map_set(4, 29, 12);
-
-    map_set(4, 13, 13);
-    map_set(4, 14, 12);
-    map_set(4, 15, 11);
-    map_set(4, 16, 10);
-    map_set(4, 17, 9);
-    map_set(4, 18, 8);
-    map_set(4, 19, 7);
-    map_set(4, 20, 6);
-    map_set(4, 21, 5);
-    map_set(4, 22, 4);
-    map_set(4, 23, 4);
-    map_set(4, 24, 3);
-    map_set(4, 25, 3);
+    map_object_add("../images/flower.png", 1, 1, 1, 1, MAP_OBJECT_AIR, 0); // ID = 5
+    map_object_add("../images/flower2.png", 1, 1, 1, 1, MAP_OBJECT_AIR, 0); // ID = 6
+    map_object_add("../images/grass.png", 1, 1, 1, 1, MAP_OBJECT_SOLID, 0); // ID = 7
+    map_object_add("../images/coin.png", 16, 16, 4, 4, MAP_OBJECT_AIR, 1); // ID = 8
 
     positionScreenWorld.x = 0;
     positionScreenWorld.y = 0;
+
+    create_default_map(width, height);
 }
 
 void map_allocate(unsigned width, unsigned height)
@@ -80,14 +46,17 @@ void map_set(int map_object, int x, int y)
 
     static_object_t* obj = (static_object_t*) calloc(1, sizeof(static_object_t));
 
-    obj->sprite = &objects[map_object].sprite;
-    obj->objectType = objects[map_object].objectType; 
-    obj->ID = objects[map_object].ID;
+    obj->sprite = &map_objects[map_object].sprite;
+    obj->objectType = map_objects[map_object].objectType; 
+    obj->ID = map_objects[map_object].ID;
     obj->positionMap.x = x * MAP_PIXEL;
     obj->positionMap.y = y * MAP_PIXEL;
     obj->direction = LEFT;
     obj->global_chain.next = NULL;
     obj->global_chain.prev = NULL;
+    obj->current_animation = 0;
+    obj->animation_status = 1;
+    obj->animation = map_objects[map_object].animation; 
     animation_static_object_add(obj);
 }
 
@@ -96,15 +65,69 @@ int map_get(int x, int y)
     return map[x][y];
 }
 
-void map_object_add(char* path, int nb_sprites, int type)
+void map_object_add(char* path, int nb_sprites, int steps_nb, int horizontal_anim_nb, int vertical_anim_nb, int type, int animation)
 {
     countID++;
-    sprite_create(&objects[countID].sprite, path, LEFT, nb_sprites, 1, 1, 1, 0, 1);
-    objects[countID].objectType = type;
-    objects[countID].ID = countID;   
+    sprite_create(&map_objects[countID].sprite, path, LEFT, nb_sprites, steps_nb, horizontal_anim_nb, vertical_anim_nb, false, 1);
+    map_objects[countID].objectType = type;
+    map_objects[countID].ID = countID;   
+    map_objects[countID].animation = animation;  
 }
 
 int get_type(int object)
 {
-    return objects[object].objectType;
+    if(object >= 0 && object < 10)
+    {
+        return map_objects[object].objectType;
+    }
+    return 0;
+}
+
+
+void create_default_map(unsigned width, unsigned height)
+{
+     // Sol
+    for(int x = 0; x < width; x++)
+    {
+        map_set(OBJECT_GROUND, x, height - 1);
+    }
+
+    // Murs
+    for(int y = 0; y < height; y++)
+    {
+        map_set(OBJECT_WALL, 0, y);
+        map_set(OBJECT_WALL, width - 1, y);
+    }
+
+    map_set(OBJECT_WALL, 3, 14);
+    map_set(OBJECT_WALL, 4, 15);
+    map_set(OBJECT_WALL, 5, 14);
+    map_set(OBJECT_FLOOR, 6, 13);
+    map_set(OBJECT_WALL, 7, 13);
+    map_set(OBJECT_WALL, 8, 12);
+    map_set(OBJECT_FLOOR, 9, 11);
+    map_set(OBJECT_FLOOR, 10, 11);
+
+    map_set(OBJECT_WALL, 25, 14);
+    map_set(OBJECT_WALL, 26, 15);
+    map_set(OBJECT_WALL, 26, 14);
+    map_set(OBJECT_FLOOR, 27, 13);
+    map_set(OBJECT_WALL, 28, 13);
+    map_set(OBJECT_WALL, 29, 12);
+
+    map_set(OBJECT_WALL, 13, 13);
+    map_set(OBJECT_WALL, 14, 12);
+    map_set(OBJECT_WALL, 15, 11);
+    map_set(OBJECT_WALL, 16, 10);
+    map_set(OBJECT_WALL, 17, 9);
+    map_set(OBJECT_WALL, 18, 8);
+    map_set(OBJECT_WALL, 19, 7);
+    map_set(OBJECT_WALL, 20, 6);
+    map_set(OBJECT_WALL, 21, 5);
+    map_set(OBJECT_WALL, 22, 4);
+    map_set(OBJECT_WALL, 23, 4);
+    map_set(OBJECT_WALL, 24, 3);
+    map_set(OBJECT_WALL, 25, 3);
+    map_set(OBJECT_COIN, 25, 2);
+    map_set(OBJECT_COIN, 24, 2);
 }

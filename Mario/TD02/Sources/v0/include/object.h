@@ -58,6 +58,7 @@ typedef struct _dyn_obj {
     action_t actions[MAX_ACTION];
     myTimer_t timer;
     int canMoveTrees;
+    int speed;
 } dynamic_object_t;
 
 
@@ -75,7 +76,7 @@ extern object_type_t object_class[];
 void object_init ();
 
 // Initialize fields of object obj
-void object_object_init (dynamic_object_t *obj, sprite_t *sp, int type, int state, int x, int y, float xs, float ys, int direction, int animation_status);
+void object_object_init (dynamic_object_t *obj, sprite_t *sp, int type, int state, int x, int y, int speed, int direction, int animation_status);
 
 
 #define for_all_objects_dyn(var) \

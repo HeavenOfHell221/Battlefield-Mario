@@ -62,8 +62,11 @@ void graphics_render_object(dynamic_object_t* object)
   dst.h = object->sprite->display_height * object->sprite->size_factor;
 
   SDL_RendererFlip Flip = SDL_FLIP_NONE;
+
   if (object->sprite->original_direction != object->direction)
+  {
     Flip = SDL_FLIP_HORIZONTAL;
+  }
 
   SDL_RenderCopyEx (ren, object->sprite->texture, &src, &dst, 0, NULL, Flip);
 }

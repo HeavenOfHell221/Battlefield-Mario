@@ -7,6 +7,7 @@
 #include "object.h"
 #include "animation.h"
 #include "generator.h"
+#include "map.h"
 
 #define GFX_NONE      0
 #define GFX_BLINK     1
@@ -21,6 +22,7 @@ void graphics_render ();
 void graphics_clean ();
 void graphics_render_object();
 void graphics_render_scrolling_trees (sprite_t* sprite, double factor);
+void graphics_render_object_static(static_object_t* currentObject);
 extern SDL_Renderer* ren;
 
 #endif

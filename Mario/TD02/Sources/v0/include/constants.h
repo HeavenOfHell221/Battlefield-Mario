@@ -12,7 +12,7 @@
 #define MAX_GRAVITY 15 //Force max que la gravité exerce
 #define GRAVITY 1 //Gravité ajouté par image
 #define JUMP_FORCE -19
-#define SHOT_MISSILE_DELAY 500
+#define SHOT_MISSILE_DELAY 300
 
 #define MAX_ACTION 2
 
@@ -22,7 +22,7 @@
 #define REVERSED_DIRECTION -1
 
 #define MAP_SIZE_X 38
-#define MAP_SIZE_Y 17
+#define MAP_SIZE_Y 30
 
 #define MAP_PIXEL 64
 

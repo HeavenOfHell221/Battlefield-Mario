@@ -56,8 +56,8 @@ void graphics_render_object(dynamic_object_t* object)
   src.w = object->sprite->display_width;
   src.h = object->sprite->display_height;
   
-  dst.x = object->positionScreen.x;
-  dst.y = object->positionScreen.y;
+  dst.x = object->positionMap.x - positionScreenWorld.x;
+  dst.y = object->positionMap.y - positionScreenWorld.y;
   dst.w = object->sprite->display_width * object->sprite->size_factor;
   dst.h = object->sprite->display_height * object->sprite->size_factor;
 
@@ -69,6 +69,53 @@ void graphics_render_object(dynamic_object_t* object)
   }
 
   SDL_RenderCopyEx (ren, object->sprite->texture, &src, &dst, 0, NULL, Flip);
+}
+
+void graphics_render_object_static(static_object_t* currentObject)
+{
+  SDL_Rect src, dst;
+
+  if(currentObject->animation == 1)
+  {
+    currentObject->current_animation = (currentObject->current_animation + currentObject->animation_status) % currentObject->sprite->images_number;
+
+    src.x = (currentObject->current_animation % currentObject->sprite->horizontal_animation_number) * currentObject->sprite->display_width;
+    
+    if(currentObject->sprite->vertical_animation_number == 1)
+    {
+      src.y =  0;
+    }
+    else
+    {
+      src.y = currentObject->current_animation / currentObject->sprite->vertical_animation_number * currentObject->sprite->display_height;
+    }
+
+    src.w = currentObject->sprite->display_width;
+    src.h = currentObject->sprite->display_height;
+
+    dst.x = currentObject->positionMap.x - positionScreenWorld.x;
+    dst.y = currentObject->positionMap.y - positionScreenWorld.y;
+    dst.w = currentObject->sprite->display_width;
+    dst.h = currentObject->sprite->display_height;
+
+    SDL_RendererFlip Flip = SDL_FLIP_NONE;
+
+    if (currentObject->sprite->original_direction != currentObject->direction)
+    {
+      Flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_RenderCopyEx (ren, currentObject->sprite->texture, &src, &dst, 0, NULL, Flip);
+  }
+  else
+  {
+    dst.x = currentObject->positionMap.x - positionScreenWorld.x;
+    dst.y = currentObject->positionMap.y - positionScreenWorld.y;
+    dst.w = currentObject->sprite->display_width;
+    dst.h = currentObject->sprite->display_height;
+
+    SDL_RenderCopy (ren, currentObject->sprite->texture, NULL, &dst);
+  }
 }
 
 void graphics_render_scrolling_trees (sprite_t* sprite, double factor)

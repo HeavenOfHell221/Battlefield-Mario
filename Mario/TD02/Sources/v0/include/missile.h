@@ -10,6 +10,9 @@
 
 void animation_missile_add (dynamic_object_t *obj, int direction);
 int animation_missile_onestep (dynamic_object_t *obj);
-void badbirdDetection(dynamic_object_t *object);
+
+void apply_motion_missile(dynamic_object_t* object);
+void apply_animation_missile(dynamic_object_t* object);
+void apply_detection_missile(dynamic_object_t* object);
 
 #endif

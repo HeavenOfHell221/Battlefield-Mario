@@ -2,8 +2,9 @@
 
 void animation_explosion_add (dynamic_object_t *object, int x_offset, int y_offset)
 {
-    object->positionScreen.x = x_offset;
-    object->positionScreen.y = y_offset;
+    object->positionMap.x = x_offset;
+    object->positionMap.y = y_offset;
+
     animation_mobile_object_add(object);
 }
 
@@ -13,9 +14,7 @@ void createExplosion(dynamic_object_t *object)
 
     object_object_init(explosion, &explosion_sprite, OBJECT_TYPE_EXPLOSION, OBJECT_STATE_IN_AIR, 0, 0, 8, RIGHT, NORMAL_DIRECTION);
 
-    animation_explosion_add(explosion, 
-    object->positionScreen.x - ((explosion->sprite->display_width*explosion->sprite->size_factor) / 2) + object->sprite->display_width, 
-    object->positionScreen.y - ((explosion->sprite->display_height*explosion->sprite->size_factor) / 2) + object->sprite->display_height/2);
+    animation_explosion_add(explosion, object->positionMap.x - object->sprite->display_width, object->positionMap.y - (object->sprite->display_height/2));
 }
 
 int animation_explosion_onestep (dynamic_object_t *object)
@@ -23,8 +22,6 @@ int animation_explosion_onestep (dynamic_object_t *object)
     if(object->current_animation == object->sprite->images_number - 1)
         return OBJECT_STATE_DESTROYED;
 
-    /*object->position.x -= bird_obj.xs;
-    object->position.y -= (bird_obj.xs/2);*/
 
     if(isPossibleAction(&object->nextAnimationStep))
     {

@@ -99,11 +99,11 @@ void create_default_map(unsigned width, unsigned height)
         map_set(OBJECT_WALL, width - 1, y);
     }
 
+    map_set(OBJECT_WALL, 8, 15);
     map_set(OBJECT_WALL, 3, 14);
     map_set(OBJECT_WALL, 4, 15);
     map_set(OBJECT_WALL, 5, 14);
     map_set(OBJECT_FLOOR, 6, 13);
-    map_set(OBJECT_WALL, 7, 13);
     map_set(OBJECT_WALL, 8, 12);
     map_set(OBJECT_FLOOR, 9, 11);
     map_set(OBJECT_FLOOR, 10, 11);
@@ -115,19 +115,17 @@ void create_default_map(unsigned width, unsigned height)
     map_set(OBJECT_WALL, 28, 13);
     map_set(OBJECT_WALL, 29, 12);
 
-    map_set(OBJECT_WALL, 13, 13);
-    map_set(OBJECT_WALL, 14, 12);
-    map_set(OBJECT_WALL, 15, 11);
-    map_set(OBJECT_WALL, 16, 10);
-    map_set(OBJECT_WALL, 17, 9);
-    map_set(OBJECT_WALL, 18, 8);
-    map_set(OBJECT_WALL, 19, 7);
-    map_set(OBJECT_WALL, 20, 6);
-    map_set(OBJECT_WALL, 21, 5);
-    map_set(OBJECT_WALL, 22, 4);
-    map_set(OBJECT_WALL, 23, 4);
-    map_set(OBJECT_WALL, 24, 3);
-    map_set(OBJECT_WALL, 25, 3);
-    map_set(OBJECT_COIN, 25, 2);
-    map_set(OBJECT_COIN, 24, 2);
+    map_set(OBJECT_WALL, 13, 18);
+    map_set(OBJECT_WALL, 14, 17);
+    map_set(OBJECT_WALL, 15, 16);
+    map_set(OBJECT_WALL, 16, 15);
+    map_set(OBJECT_WALL, 17, 14);
+    map_set(OBJECT_WALL, 18, 13);
+    map_set(OBJECT_WALL, 19, 12);
+    map_set(OBJECT_WALL, 20, 11);
+    map_set(OBJECT_WALL, 21, 10);
+    map_set(OBJECT_WALL, 22, 9);
+    map_set(OBJECT_WALL, 23, 8);
+    map_set(OBJECT_WALL, 24, 7);
+    map_set(OBJECT_WALL, 25, 6);
 }

@@ -57,7 +57,7 @@ int animation_mario_onestep(dynamic_object_t* object)
     apply_max_edge(object);
     apply_motion(object);
     apply_animation(object);
-    //printDebug(object);
+    printDebug(object);
 
     return object->state;
 }
@@ -220,10 +220,8 @@ void apply_detection_bloc_solid_Y(dynamic_object_t* object)
 {
     if(object->ys > 0) // Vers le bas
     {
-        int bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
-         (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
-         (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        int bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL, (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        int bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL, (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
 
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID)
         {
@@ -231,10 +229,8 @@ void apply_detection_bloc_solid_Y(dynamic_object_t* object)
         }
         else if(get_type(bloc1) == MAP_OBJECT_SEMI_SOLID || get_type(bloc2) == MAP_OBJECT_SEMI_SOLID)
         {
-            int bloc3 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
-             (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
-            int bloc4 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
-             (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
+            int bloc3 = map_get((object->positionMap.x + 5) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
+            int bloc4 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height - 5) / MAP_PIXEL);
 
             if(get_type(bloc3) != MAP_OBJECT_SEMI_SOLID && get_type(bloc4) != MAP_OBJECT_SEMI_SOLID)
             {

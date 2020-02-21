@@ -158,9 +158,9 @@ void graphics_render (void)
   // We display the background clouds
   graphics_render_background (&background_sprite);
 
-  graphics_render_scrolling_trees(&tree_sprite_tab[2], 0.5);
-  graphics_render_scrolling_trees(&tree_sprite_tab[1], 1);
-  graphics_render_scrolling_trees(&tree_sprite_tab[0], 2);
+  graphics_render_scrolling_trees(&tree_sprite_tab[2], 0.3);
+  graphics_render_scrolling_trees(&tree_sprite_tab[1], 0.6);
+  graphics_render_scrolling_trees(&tree_sprite_tab[0], 1);
 
   animation_render_objects();
 

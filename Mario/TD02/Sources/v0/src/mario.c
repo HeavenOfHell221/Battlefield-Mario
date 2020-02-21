@@ -79,7 +79,7 @@ void apply_max_edge_Y(dynamic_object_t* object)
         }
         else
         {
-            while((positionScreenWorld.y % MAP_PIXEL) != 0)
+            while((positionScreenWorld.y % MAP_PIXEL) != 0 && positionScreenWorld.y > 0)
             {
                 positionScreenWorld.y--;
                 object->positionMap.y--;
@@ -108,12 +108,14 @@ void apply_max_edge_Y(dynamic_object_t* object)
 
 void apply_max_edge_X(dynamic_object_t* object)
 {
+    object->canMoveTrees = 0;
     if(object->positionScreen.x > WIN_WIDTH * 0.8)
     {
         if(positionScreenWorld.x + WIN_WIDTH < MAP_SIZE_X * MAP_PIXEL)
         {
             object->positionScreen.x = WIN_WIDTH * 0.8 + 1;
             positionScreenWorld.x += object->xs;
+            object->canMoveTrees = 1;
         }
     }
     else if(object->positionScreen.x < WIN_WIDTH * 0.2)
@@ -121,8 +123,8 @@ void apply_max_edge_X(dynamic_object_t* object)
         if(positionScreenWorld.x != 0)
         {
             object->positionScreen.x = WIN_WIDTH * 0.2 - 1;
-
             positionScreenWorld.x += object->xs;
+            object->canMoveTrees = 1;
             if(positionScreenWorld.x < 0)
             {
                 positionScreenWorld.x = 0;
@@ -165,6 +167,13 @@ void apply_motion(dynamic_object_t* object)
     if(object->positionMap.y < 0)
     {
         object->positionMap.y = 0;
+        object->ys = 0;
+    }
+
+    if(object->positionScreen.y < 0)
+    {   
+        object->positionScreen.y = 0;
+        object->ys = 0;
     }
 }
 
@@ -184,6 +193,12 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
         int bloc1 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + 1) / MAP_PIXEL);
         int bloc2 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
         int bloc3 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
+        
+        if(get_type(bloc3) == MAP_OBJECT_COLLECTIBLE)
+        {
+            printf("AAAAAAAAAAAA\n");
+        }
+        
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID || get_type(bloc3) == MAP_OBJECT_SOLID)
         {
             object->xs = 0;
@@ -208,10 +223,8 @@ void apply_detection_bloc_solid_Y_aux(dynamic_object_t* object, int bloc1, int b
     && object->ys > 0)
     {
         object->ys--;
-        bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL,
-        (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
-        bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,
-        (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        bloc1 = map_get((object->positionMap.x + 5) / MAP_PIXEL, (object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
+        bloc2 = map_get((object->positionMap.x + object->sprite->display_width - 5) / MAP_PIXEL,(object->positionMap.y + object->ys + object->sprite->display_height) / MAP_PIXEL);
     }
     object->state = OBJECT_STATE_GROUND;
 }

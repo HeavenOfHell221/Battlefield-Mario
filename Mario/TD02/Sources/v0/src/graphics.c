@@ -15,7 +15,7 @@ void graphics_init (Uint32 render_flags, char *background_skin)
   atexit (generator_clean);
 
   // Create main window
-  win = SDL_CreateWindow ("Flappy Bird", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+  win = SDL_CreateWindow ("Battlefield Mario", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			  WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN);
   if (win == NULL)
     exit_with_error ("SDL_CreateWindow");
@@ -51,7 +51,7 @@ void graphics_render_object(dynamic_object_t* object)
   }
   else
   {
-    src.y = object->current_animation / object->sprite->vertical_animation_number * object->sprite->display_height;
+    src.y = object->sprite->display_height * (object->current_animation / object->sprite->horizontal_animation_number);
   }
   src.w = object->sprite->display_width;
   src.h = object->sprite->display_height;
@@ -87,7 +87,7 @@ void graphics_render_object_static(static_object_t* currentObject)
     }
     else
     {
-      src.y = currentObject->current_animation / currentObject->sprite->vertical_animation_number * currentObject->sprite->display_height;
+      src.y = currentObject->sprite->display_height * (currentObject->current_animation / currentObject->sprite->horizontal_animation_number);
     }
 
     src.w = currentObject->sprite->display_width;
@@ -105,6 +105,8 @@ void graphics_render_object_static(static_object_t* currentObject)
       Flip = SDL_FLIP_HORIZONTAL;
     }
 
+    
+    
     SDL_RenderCopyEx (ren, currentObject->sprite->texture, &src, &dst, 0, NULL, Flip);
   }
   else

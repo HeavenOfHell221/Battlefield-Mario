@@ -22,7 +22,7 @@ void map_new(unsigned width, unsigned height)
     map_object_add("../images/flower.png", 1, 1, 1, 1, MAP_OBJECT_AIR, 0); // ID = 5
     map_object_add("../images/flower2.png", 1, 1, 1, 1, MAP_OBJECT_AIR, 0); // ID = 6
     map_object_add("../images/grass.png", 1, 1, 1, 1, MAP_OBJECT_SEMI_SOLID, 0); // ID = 7
-    map_object_add("../images/coin.png", 16, 16, 4, 4, MAP_OBJECT_COLLECTIBLE, 1); // ID = 8
+    map_object_add("../images/coin.png", 21, 21, 16, 2, MAP_OBJECT_COLLECTIBLE, 1); // ID = 8
 
     positionScreenWorld.x = 0;
     positionScreenWorld.y = 0;
@@ -153,6 +153,6 @@ void create_default_map(unsigned width, unsigned height)
     map_set(OBJECT_WALL, 26, 5);
     map_set(OBJECT_WALL, 27, 5);
 
-    map_set(OBJECT_COIN, 26, 4);
-    map_set(OBJECT_COIN, 27, 4);
+    //map_set(OBJECT_COIN, 26, 4);
+    //map_set(OBJECT_COIN, 27, 4);
 }

@@ -57,7 +57,7 @@ int animation_mario_onestep(dynamic_object_t* object)
     apply_max_edge(object);
     apply_motion(object);
     apply_animation(object);
-    printDebug(object);
+    //printDebug(object);
 
     return object->state;
 }
@@ -196,7 +196,7 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
         
         if(get_type(bloc3) == MAP_OBJECT_COLLECTIBLE)
         {
-            printf("AAAAAAAAAAAA\n");
+            //printf("AAAAAAAAAAAA\n");
         }
         
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID || get_type(bloc3) == MAP_OBJECT_SOLID)

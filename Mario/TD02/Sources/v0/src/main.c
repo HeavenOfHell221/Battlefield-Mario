@@ -11,6 +11,7 @@
 #include "missile.h"
 #include "generator.h"
 #include "editor.h"
+#include "save.h"
 
 #define DEFAULT_BACKGROUND_SKIN  "trees"
 

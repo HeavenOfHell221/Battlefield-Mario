@@ -69,13 +69,27 @@ void map_object_add(char* path, int nb_sprites, int steps_nb, int horizontal_ani
 
 int get_type(int object)
 {
-    if(object >= 0 && object < 10)
+    if(object >= 0 && object < NUMBER_OF_BLOCK_TYPE)
     {
         return map_objects[object].objectType;
     }
     return 0;
 }
 
+int map_width()
+{
+    return MAP_SIZE_X;
+}
+
+int map_height()
+{
+    return MAP_SIZE_Y;
+}
+
+int map_objects()
+{
+    return NUMBER_OF_BLOCK_TYPE;
+}
 
 void create_default_map(unsigned width, unsigned height)
 {

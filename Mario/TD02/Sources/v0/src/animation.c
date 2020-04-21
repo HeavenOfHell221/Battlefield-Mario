@@ -1,7 +1,7 @@
 #include "animation.h"
 
 list_head_t all_objects_dyn;
-list_head_t all_objects_static;
+//list_head_t all_objects_static;
 
 void animation_mobile_object_add (dynamic_object_t *object)
 {
@@ -13,7 +13,7 @@ void animation_mobile_object_del (dynamic_object_t *object)
     list_del(&object->global_chain);
 }
 
-void animation_static_object_add (static_object_t *object)
+/*void animation_static_object_add (static_object_t *object)
 {
     list_add_tail(&object->global_chain, &all_objects_static);
 }
@@ -21,7 +21,7 @@ void animation_static_object_add (static_object_t *object)
 void animation_static_object_del (static_object_t *object)
 {
     list_del(&object->global_chain);
-}
+}*/
 
 void animation_clean()
 {
@@ -35,15 +35,22 @@ void animation_clean()
 void animation_init ()
 {
     INIT_LIST_HEAD(&all_objects_dyn);
-    INIT_LIST_HEAD(&all_objects_static);
+    //INIT_LIST_HEAD(&all_objects_static);
     createMario();
     animation_mobile_object_add(&mario_object);
 }
 
 void animation_one_step (int left, int right, int up, int down, int espace)
 {
-    animation_mario_moves(&mario_object, left, right, up, espace);
+    if(GAMEMODE == GAMEMODE_INGAME)
+    {
+        animation_mario_moves(&mario_object, left, right, up, espace);
+    }
+    else if(GAMEMODE == GAMEMODE_CONSTRUCT)
+    {
 
+    }
+   
     for_all_objects_dyn(currentObject)
     {
         animate_func_t func = object_class[currentObject->type].animate_func;
@@ -66,10 +73,21 @@ void animation_one_step (int left, int right, int up, int down, int espace)
 
 void animation_render_objects()
 {
-    for_all_objects_static(currentObject)
+    int map_type;
+
+    for(int x = 0; x < MAP_SIZE_X; x++)
     {
-        graphics_render_object_static(currentObject);
+        for(int y = 0; y < MAP_SIZE_Y; y++)
+        {
+            map_type = map_get(x, y);
+            if(map_type != OBJECT_AIR)
+            {
+                graphics_render_object_static(&map_objects[map_type], x * MAP_PIXEL, y * MAP_PIXEL);
+            }
+        }
     }
+    
+    map_objects[OBJECT_COIN].current_animation = (map_objects[OBJECT_COIN].current_animation + map_objects[OBJECT_COIN].animation_status) % map_objects[OBJECT_COIN].sprite->images_number;
     
     for_all_objects_dyn(currentObject)
     {

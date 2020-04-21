@@ -26,5 +26,7 @@
 
 #define MAP_PIXEL 64
 
+#define GAMEMODE_INGAME 1
+#define GAMEMODE_CONSTRUCT 0
 
 #endif

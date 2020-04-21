@@ -25,13 +25,6 @@ int horizontal_anim_nb, int vertical_anim_nb, bool reverse_animation, int size_f
     sprite->native_height = height;
     sprite->display_width = sprite->native_width  / horizontal_anim_nb;
     sprite->display_height = sprite->native_height / vertical_anim_nb;
-    
-    if(path == "../images/coin.png")
-    {
-        printf("sprite->display_width = %d\n", sprite->display_width);
-        printf("sprite->display_height = %d\n", sprite->display_height);
-    }
-    
     sprite->original_direction = original_direction;
     sprite->offsetX = 0;
     sprite->images_number = images_number;

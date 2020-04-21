@@ -44,7 +44,7 @@ void map_set(int map_object, int x, int y)
 {
     map[x][y] = map_object;
 
-    static_object_t* obj = (static_object_t*) calloc(1, sizeof(static_object_t));
+    /*static_object_t* obj = (static_object_t*) calloc(1, sizeof(static_object_t));
 
     obj->sprite = &map_objects[map_object].sprite;
     obj->objectType = map_objects[map_object].objectType; 
@@ -57,7 +57,7 @@ void map_set(int map_object, int x, int y)
     obj->current_animation = 0;
     obj->animation_status = 1;
     obj->animation = map_objects[map_object].animation; 
-    animation_static_object_add(obj);
+    animation_static_object_add(obj);*/
 }
 
 int map_get(int x, int y)
@@ -68,10 +68,17 @@ int map_get(int x, int y)
 void map_object_add(char* path, int nb_sprites, int steps_nb, int horizontal_anim_nb, int vertical_anim_nb, int type, int animation)
 {
     countID++;
-    sprite_create(&map_objects[countID].sprite, path, LEFT, nb_sprites, steps_nb, horizontal_anim_nb, vertical_anim_nb, false, 1);
+    map_objects[countID].sprite = (sprite_t*) calloc(1, sizeof(sprite_t));
+
+    sprite_create(map_objects[countID].sprite, path, LEFT, nb_sprites, steps_nb, horizontal_anim_nb, vertical_anim_nb, false, 1);
     map_objects[countID].objectType = type;
     map_objects[countID].ID = countID;   
-    map_objects[countID].animation = animation;  
+    map_objects[countID].animation = animation;
+    map_objects[countID].direction = LEFT;
+    map_objects[countID].global_chain.next = NULL;
+    map_objects[countID].global_chain.prev = NULL;
+    map_objects[countID].current_animation = 0;
+    map_objects[countID].animation_status = 1;
 }
 
 int get_type(int object)
@@ -153,6 +160,6 @@ void create_default_map(unsigned width, unsigned height)
     map_set(OBJECT_WALL, 26, 5);
     map_set(OBJECT_WALL, 27, 5);
 
-    //map_set(OBJECT_COIN, 26, 4);
-    //map_set(OBJECT_COIN, 27, 4);
+    map_set(OBJECT_COIN, 26, 4);
+    map_set(OBJECT_COIN, 27, 4);
 }

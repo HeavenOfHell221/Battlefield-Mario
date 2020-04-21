@@ -26,4 +26,6 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object);
 void printDebug(dynamic_object_t* object);
 void apply_detection_bloc_solid_Y_aux(dynamic_object_t* object, int bloc1, int bloc2);
 
+extern int GAMEMODE;
+
 #endif

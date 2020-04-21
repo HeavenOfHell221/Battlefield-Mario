@@ -6,11 +6,13 @@ enum {
 };
 
 dynamic_object_t mario_object;
+int GAMEMODE;
 
 void createMario()
 {
     object_object_init(&mario_object, &mario_sprite, OBJECT_TYPE_MARIO, OBJECT_STATE_IN_AIR, WIN_WIDTH * 0.25, WIN_HEIGHT * 0.25, 4, LEFT, NORMAL_DIRECTION);
     action_init_init(&mario_object, shotMissile, SHOT_MISSILE_DELAY);
+    GAMEMODE = GAMEMODE_INGAME;
 }
 
 void animation_mario_moves(dynamic_object_t* object, int left, int right, int up, int espace)
@@ -190,13 +192,20 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
 {
     if(object->xs > 0) // Vers la droite
     {
-        int bloc1 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + 1) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
-        int bloc3 = map_get((object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
+        int x = (object->positionMap.x + object->xs + object->sprite->display_width) / MAP_PIXEL;
+
+        int bloc1 = map_get(x, (object->positionMap.y + 1) / MAP_PIXEL);
+        int bloc2 = map_get(x, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        int bloc3 = map_get(x, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
         
+        if(get_type(bloc2) == MAP_OBJECT_COLLECTIBLE)
+        {
+            map_set(OBJECT_AIR, x, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        }
+
         if(get_type(bloc3) == MAP_OBJECT_COLLECTIBLE)
         {
-            //printf("AAAAAAAAAAAA\n");
+            map_set(OBJECT_AIR, x, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
         }
         
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID || get_type(bloc3) == MAP_OBJECT_SOLID)
@@ -206,9 +215,21 @@ void apply_detection_bloc_solid_X(dynamic_object_t* object)
     }
     else if(object->xs < 0) // Vers la gauche
     {
-        int bloc1 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL, (object->positionMap.y + 1) / MAP_PIXEL);
-        int bloc2 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
-        int bloc3 = map_get((object->positionMap.x + object->xs) / MAP_PIXEL, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
+        int x = (object->positionMap.x + object->xs) / MAP_PIXEL;
+        int bloc1 = map_get(x, (object->positionMap.y + 1) / MAP_PIXEL);
+        int bloc2 = map_get(x, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        int bloc3 = map_get(x, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
+
+        if(get_type(bloc2) == MAP_OBJECT_COLLECTIBLE)
+        {
+            map_set(OBJECT_AIR, x, (object->positionMap.y + 1 + object->sprite->display_height / 2) / MAP_PIXEL);
+        }
+
+        if(get_type(bloc3) == MAP_OBJECT_COLLECTIBLE)
+        {
+            map_set(OBJECT_AIR, x, (object->positionMap.y + object->sprite->display_height) / MAP_PIXEL);
+        }
+
         if(get_type(bloc1) == MAP_OBJECT_SOLID || get_type(bloc2) == MAP_OBJECT_SOLID || get_type(bloc3) == MAP_OBJECT_SOLID)
         {
             object->xs = 0;

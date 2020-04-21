@@ -79,7 +79,7 @@ int main (int argc, char **argv)
   animation_init();
   map_new(MAP_SIZE_X, MAP_SIZE_Y);
 
-  for (int quit = 0; !quit;) { //Gab : C'est un while si tu veut, si ça t'aide
+  for (int quit = 0; !quit;) {
     SDL_Event evt;
 
     // We look for keyboard/mouse events (in a non-blocking way)
@@ -121,7 +121,24 @@ int main (int argc, char **argv)
     int left = keystates[SDL_SCANCODE_LEFT];
     int right = keystates[SDL_SCANCODE_RIGHT];
     int espace = keystates[SDL_SCANCODE_SPACE];
-  
+    int tab = keystates[SDL_SCANCODE_TAB];
+    int e = keystates[SDL_SCANCODE_E];
+    int p = keystates[SDL_SCANCODE_P];
+
+    if(e)
+    {
+      GAMEMODE = GAMEMODE_CONSTRUCT;
+    }
+    else if(p)
+    {
+      GAMEMODE = GAMEMODE_INGAME;
+    }
+
+    if(tab)
+    {
+      GAMEMODE = !GAMEMODE;
+    }
+
     animation_one_step(left, right, up, down, espace);
     graphics_render();
   }

@@ -22,7 +22,7 @@ void graphics_render ();
 void graphics_clean ();
 void graphics_render_object();
 void graphics_render_scrolling_trees (sprite_t* sprite, double factor);
-void graphics_render_object_static(static_object_t* currentObject);
+void graphics_render_object_static(map_object_type_t* currentObject, int x, int y);
 extern SDL_Renderer* ren;
 
 #endif

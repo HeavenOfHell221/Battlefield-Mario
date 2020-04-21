@@ -71,14 +71,12 @@ void graphics_render_object(dynamic_object_t* object)
   SDL_RenderCopyEx (ren, object->sprite->texture, &src, &dst, 0, NULL, Flip);
 }
 
-void graphics_render_object_static(static_object_t* currentObject)
+void graphics_render_object_static(map_object_type_t* currentObject, int x, int y)
 {
   SDL_Rect src, dst;
 
   if(currentObject->animation == 1)
   {
-    currentObject->current_animation = (currentObject->current_animation + currentObject->animation_status) % currentObject->sprite->images_number;
-
     src.x = (currentObject->current_animation % currentObject->sprite->horizontal_animation_number) * currentObject->sprite->display_width;
     
     if(currentObject->sprite->vertical_animation_number == 1)
@@ -93,8 +91,8 @@ void graphics_render_object_static(static_object_t* currentObject)
     src.w = currentObject->sprite->display_width;
     src.h = currentObject->sprite->display_height;
 
-    dst.x = currentObject->positionMap.x - positionScreenWorld.x;
-    dst.y = currentObject->positionMap.y - positionScreenWorld.y;
+    dst.x = x - positionScreenWorld.x;
+    dst.y = y - positionScreenWorld.y;
     dst.w = currentObject->sprite->display_width;
     dst.h = currentObject->sprite->display_height;
 
@@ -105,14 +103,12 @@ void graphics_render_object_static(static_object_t* currentObject)
       Flip = SDL_FLIP_HORIZONTAL;
     }
 
-    
-    
     SDL_RenderCopyEx (ren, currentObject->sprite->texture, &src, &dst, 0, NULL, Flip);
   }
   else
   {
-    dst.x = currentObject->positionMap.x - positionScreenWorld.x;
-    dst.y = currentObject->positionMap.y - positionScreenWorld.y;
+    dst.x = x - positionScreenWorld.x;
+    dst.y = y - positionScreenWorld.y;
     dst.w = currentObject->sprite->display_width;
     dst.h = currentObject->sprite->display_height;
 

@@ -2,8 +2,8 @@
 #define CONSTANTS_IS_DEF
 
 
-#define WIN_WIDTH   1856
-#define WIN_HEIGHT  1024
+#define WIN_WIDTH   1700
+#define WIN_HEIGHT  900
 
 #define LEFT 0
 #define RIGHT 1
@@ -21,12 +21,14 @@
 #define NORMAL_DIRECTION 1
 #define REVERSED_DIRECTION -1
 
-#define MAP_SIZE_X 38
-#define MAP_SIZE_Y 17
-
 #define MAP_PIXEL 64
 
 #define GAMEMODE_INGAME 1
-#define GAMEMODE_CONSTRUCT 0
+#define GAMEMODE_EDITOR 0
+
+#define NUMBER_OF_BLOCK_TYPE 9
+
+extern int MAP_SIZE_X;
+extern int MAP_SIZE_Y;
 
 #endif

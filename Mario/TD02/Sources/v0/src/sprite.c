@@ -8,6 +8,7 @@ sprite_t mario_sprite;
 sprite_t missile_sprite;
 sprite_t explosion_sprite;
 sprite_t ground_sprite;
+sprite_t cursor_sprite;
 
 void sprite_create(sprite_t *sprite, char *path, int original_direction, int images_number, int steps_nb, 
 int horizontal_anim_nb, int vertical_anim_nb, bool reverse_animation, int size_factor)
@@ -50,6 +51,7 @@ void sprite_init (char *background_skin)
     sprite_create(&missile_sprite, "../images/missiled.png", RIGHT, 12, 12, 12, 1, false, 1);
     sprite_create(&explosion_sprite, "../images/explosion.png", RIGHT, 25, 24, 5, 5, false, 2);
     sprite_create(&ground_sprite, "../images/ground.png", RIGHT, 1, 1, 1, 1, false, 1);
+    sprite_create(&cursor_sprite, "../images/cursor.png", LEFT, 1, 1, 1, 1, false, 1);
 }
 
 void sprite_clean()

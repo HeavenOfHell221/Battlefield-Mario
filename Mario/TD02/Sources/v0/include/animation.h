@@ -9,14 +9,13 @@
 #include "graphics.h"
 #include "mario.h"
 #include "map.h"
+#include "editor.h"
 
 void animation_init ();
-void animation_one_step (int left, int right, int up, int down, int espace); 
+void animation_one_step (int left, int right, int up, int down, int espace, int tab); 
 void animation_render_objects ();
 void animation_mobile_object_add (dynamic_object_t *object);
 void animation_mobile_object_del (dynamic_object_t *object);
-//void animation_static_object_add (static_object_t *object);
-//void animation_static_object_del (static_object_t *object);
 void animation_clean ();
 
 extern list_head_t all_objects_dyn;

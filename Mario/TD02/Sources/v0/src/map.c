@@ -3,7 +3,8 @@
 
 int** map;
 int countID = 0;
-map_object_type_t map_objects[10];
+map_object_type_t map_objects[NUMBER_OF_BLOCK_TYPE];
+map_object_type_t map_objects_Cursor[NUMBER_OF_BLOCK_TYPE];
 point_t positionScreenWorld;
 
 void map_new(unsigned width, unsigned height)
@@ -43,21 +44,6 @@ void map_allocate(unsigned width, unsigned height)
 void map_set(int map_object, int x, int y)
 {
     map[x][y] = map_object;
-
-    /*static_object_t* obj = (static_object_t*) calloc(1, sizeof(static_object_t));
-
-    obj->sprite = &map_objects[map_object].sprite;
-    obj->objectType = map_objects[map_object].objectType; 
-    obj->ID = map_objects[map_object].ID;
-    obj->positionMap.x = x * MAP_PIXEL;
-    obj->positionMap.y = y * MAP_PIXEL;
-    obj->direction = LEFT;
-    obj->global_chain.next = NULL;
-    obj->global_chain.prev = NULL;
-    obj->current_animation = 0;
-    obj->animation_status = 1;
-    obj->animation = map_objects[map_object].animation; 
-    animation_static_object_add(obj);*/
 }
 
 int map_get(int x, int y)
@@ -75,8 +61,8 @@ void map_object_add(char* path, int nb_sprites, int steps_nb, int horizontal_ani
     map_objects[countID].ID = countID;   
     map_objects[countID].animation = animation;
     map_objects[countID].direction = LEFT;
-    map_objects[countID].global_chain.next = NULL;
-    map_objects[countID].global_chain.prev = NULL;
+    //map_objects[countID].global_chain.next = NULL;
+    //map_objects[countID].global_chain.prev = NULL;
     map_objects[countID].current_animation = 0;
     map_objects[countID].animation_status = 1;
 }

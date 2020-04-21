@@ -38,7 +38,7 @@ typedef struct map_object_type
     int objectType;
     int ID;
     int direction; // LEFT or RIGHT
-    list_head_t global_chain;
+    //list_head_t global_chain;
     int current_animation;
     int animation_status; // normal direction or reversed
     int animation;
@@ -67,6 +67,7 @@ void create_default_map(unsigned width, unsigned height);
 extern int** map;
 extern int countID;
 extern map_object_type_t map_objects[];
+extern map_object_type_t map_objects_Cursor[];
 
 extern point_t positionScreenWorld;
 

@@ -30,6 +30,7 @@ extern sprite_t mario_sprite;
 extern sprite_t missile_sprite;
 extern sprite_t explosion_sprite;
 extern sprite_t ground_sprite;
+extern sprite_t cursor_sprite;
 
 extern SDL_Renderer* ren;
 

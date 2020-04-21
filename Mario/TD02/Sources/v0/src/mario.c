@@ -6,7 +6,6 @@ enum {
 };
 
 dynamic_object_t mario_object;
-int GAMEMODE;
 
 void createMario()
 {

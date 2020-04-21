@@ -47,23 +47,31 @@ void animation_cursor_moves(int left, int right, int up, int down, int espace, i
     if(left && isPossibleAction(&editorCursor.move))
     {
         editorCursor.position.x--;
+        positionTest();
     }
 
     if(right && isPossibleAction(&editorCursor.move))
     {
         editorCursor.position.x++;
+        positionTest();
     }
 
     if(up && isPossibleAction(&editorCursor.move))
     {
         editorCursor.position.y--;
+        positionTest();
     }
 
     if(down && isPossibleAction(&editorCursor.move))
     {
         editorCursor.position.y++;
+        positionTest();
     }
 
+} 
+
+void positionTest()
+{
     editorCursor.position.x = editorCursor.position.x < 0 ? 0 
     : editorCursor.position.x > MAP_SIZE_X ? MAP_SIZE_X 
     : editorCursor.position.x;

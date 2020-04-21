@@ -5,6 +5,7 @@
 #include "action.h"
 #include "map.h"
 
+void positionTest();
 void animation_cursor_moves(int left, int right, int up, int down, int espace, int tab);
 void createCursor(point_t position, int currentBlock);
 

@@ -4,19 +4,20 @@ int GAMEMODE;
 cursor_t editorCursor;
 
 
-void createCursor(point_t position, int currentBlock)
+void createCursor()
 {
     editorCursor.position.x = MAP_SIZE_X/2;
     editorCursor.position.y = MAP_SIZE_Y/2;
-    editorCursor.currentBlock = currentBlock;
+    editorCursor.currentBlock = OBJECT_WALL;
 
     editorCursor.positionCamCursor.x = positionScreenWorld.x;
     editorCursor.positionCamCursor.y = positionScreenWorld.y;
 
-    editorCursor.move.cooldown = 100;
-    editorCursor.switchBlock.cooldown = 125;
+    editorCursor.move.cooldown = 100; // en ms
+    editorCursor.switchBlock.cooldown = 125; // en ms
     editorCursor.placeBlock.cooldown = 0;
     editorCursor.placeBlock.currentState = 1;
+
     editorCursor.cursorLight.sprite = &cursor_sprite;
     editorCursor.cursorLight.direction = LEFT;
     editorCursor.cursorLight.animation = 0;

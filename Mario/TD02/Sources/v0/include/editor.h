@@ -19,7 +19,7 @@ point_t positionCamCursor;
 
 void positionTest();
 void animation_cursor_moves(cursor_t* editorCursor, int left, int right, int up, int down, int espace, int tab);
-void createCursor(point_t position, int currentBlock);
+void createCursor();
 void modeEditor(cursor_t* editorCursor);
 void modeInGame(cursor_t* editorCursor);
 

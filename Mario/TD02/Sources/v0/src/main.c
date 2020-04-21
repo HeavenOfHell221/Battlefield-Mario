@@ -127,8 +127,7 @@ int main (int argc, char **argv)
 	object_init();
 	animation_init();
 	map_new(MAP_SIZE_X, MAP_SIZE_Y);
-  point_t posInitCursor = {3, 3};
-  createCursor(posInitCursor, 4);
+  createCursor();
 
 	for (int quit = 0; !quit;) 
 	{

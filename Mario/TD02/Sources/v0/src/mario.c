@@ -53,12 +53,15 @@ int animation_mario_onestep(dynamic_object_t* object)
 {
     object->state = OBJECT_STATE_IN_AIR;
 
-    apply_gravity(object); 
-    apply_detection(object);
     if(GAMEMODE == GAMEMODE_INGAME)
+    {
+        apply_gravity(object); 
+        apply_detection(object);
         apply_max_edge(object);
-    apply_motion(object);
-    apply_animation(object);
+        apply_motion(object);
+        apply_animation(object);
+    }
+    
     //printDebug(object);
 
     return object->state;

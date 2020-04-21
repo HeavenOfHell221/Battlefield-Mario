@@ -171,11 +171,20 @@ int main (int argc, char **argv)
 		int left = keystates[SDL_SCANCODE_LEFT];
 		int right = keystates[SDL_SCANCODE_RIGHT];
 		int espace = keystates[SDL_SCANCODE_SPACE];
-    int e = keystates[SDL_SCANCODE_E];
-    int p = keystates[SDL_SCANCODE_P];
-    int tab = keystates[SDL_SCANCODE_TAB];
+		int e = keystates[SDL_SCANCODE_E];
+		int p = keystates[SDL_SCANCODE_P];
+		int tab = keystates[SDL_SCANCODE_TAB];
 
-    GAMEMODE = e ? GAMEMODE_EDITOR : p ? GAMEMODE_INGAME : GAMEMODE;
+    	//GAMEMODE = e ? GAMEMODE_EDITOR : p ? GAMEMODE_INGAME : GAMEMODE;
+
+		if(e)
+		{
+			modeEditor(&editorCursor);
+		}
+		else if(p)
+		{
+			modeInGame(&editorCursor);
+		}
 
 		animation_one_step(left, right, up, down, espace, tab);
 		graphics_render();

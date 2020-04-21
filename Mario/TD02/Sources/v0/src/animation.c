@@ -38,7 +38,7 @@ void animation_one_step (int left, int right, int up, int down, int espace, int 
     else if(GAMEMODE == GAMEMODE_EDITOR)
     {
         animation_mario_moves(&mario_object, 0, 0, 0, 0);
-        animation_cursor_moves(left, right, up, down, espace, tab);
+        animation_cursor_moves(&editorCursor, left, right, up, down, espace, tab);
     }
    
     for_all_objects_dyn(currentObject)

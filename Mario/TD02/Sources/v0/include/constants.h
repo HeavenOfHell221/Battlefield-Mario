@@ -2,8 +2,8 @@
 #define CONSTANTS_IS_DEF
 
 
-#define WIN_WIDTH   1700
-#define WIN_HEIGHT  900
+#define WIN_WIDTH   1792
+#define WIN_HEIGHT  960
 
 #define LEFT 0
 #define RIGHT 1

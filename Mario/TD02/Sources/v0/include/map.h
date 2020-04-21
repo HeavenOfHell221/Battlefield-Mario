@@ -44,18 +44,6 @@ typedef struct map_object_type
     int animation;
 }map_object_type_t;
 
-/*typedef struct _static_obj {
-    sprite_t *sprite;
-    int objectType;
-    int ID;
-    point_t positionMap;
-    int direction; // LEFT or RIGHT
-    list_head_t global_chain;
-    int current_animation;
-    int animation_status; // normal direction or reversed
-    int animation;
-} static_object_t;*/
-
 void map_new(unsigned width, unsigned height);
 void map_allocate(unsigned width, unsigned height);
 void map_set(int map_object, int x, int y);
